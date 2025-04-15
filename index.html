@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kahve İçelim mi?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 30px;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            font-weight: bold;
+        }
+        .btn-yes {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-yes:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .btn-no {
+            background-color: #ff6b6b;
+            color: white;
+            position: relative;
+        }
+        .btn-no:hover {
+            background-color: #ff5252;
+        }
+        .hidden {
+            display: none;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 24px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .emoji {
+            font-size: 30px;
+            position: absolute;
+            animation: float 3s ease-in infinite;
+            opacity: 0;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Merhaba Zeynep!</h1>
+        <p>KAHVE?????</p>
+        <div class="buttons">
+            <button id="yesBtn" class="btn btn-yes">Evet, severim!</button>
+            <button id="noBtn" class="btn btn-no">Hayır, teşekkürler</button>
+        </div>
+        <div id="result" class="result hidden">
+            Harika! Çok sevindim! En yakın zamanda detayları konuşalım 😊
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Hayır butonunu kaçırma işlevi
+            $("#noBtn").on("mouseover", function() {
+                // Sayfanın boyutlarına göre rastgele pozisyon hesaplama
+                const windowWidth = $(window).width() - $(this).width();
+                const windowHeight = $(window).height() - $(this).height();
+                
+                // Buton için yeni pozisyon belirleme
+                const newLeft = Math.floor(Math.random() * windowWidth);
+                const newTop = Math.floor(Math.random() * windowHeight);
+                
+                // Butonu yeni pozisyona taşıma
+                $(this).css({
+                    "position": "absolute",
+                    "left": newLeft + "px",
+                    "top": newTop + "px"
+                });
+            });
+
+            // Evet butonuna tıklandığında
+            $("#yesBtn").on("click", function() {
+                // Sonuç mesajını göster
+                $("#result").removeClass("hidden");
+                
+                // Butonları gizle
+                $(".buttons").addClass("hidden");
+                
+                // Konfetti ve emoji efekti
+                createConfetti();
+                createEmojis();
+            });
+            
+            // Konfetti oluşturma fonksiyonu
+            function createConfetti() {
+                const colors = ['#ff6b6b', '#4CAF50', '#ffb142', '#7bed9f', '#70a1ff', '#ff7979'];
+                
+                for (let i = 0; i < 100; i++) {
+                    setTimeout(() => {
+                        const confetti = $("<div class='confetti'></div>");
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        const left = Math.random() * 100;
+                        const size = Math.random() * 10 + 5;
+                        
+                        confetti.css({
+                            "background-color": color,
+                            "left": left + "vw",
+                            "width": size + "px",
+                            "height": size + "px",
+                            "top": "-5vh",
+                            "border-radius": "50%",
+                            "opacity": 1
+                        });
+                        
+                        $("body").append(confetti);
+                        
+                        confetti.animate({
+                            "top": "105vh",
+                            "left": "+=" + (Math.random() * 40 - 20) + "vw"
+                        }, 2000 + Math.random() * 3000, function() {
+                            $(this).remove();
+                        });
+                    }, i * 50);
+                }
+            }
+            
+            // Emoji oluşturma fonksiyonu
+            function createEmojis() {
+                const emojis = ['❤️', '☕', '😊', '✨', '🎉', '💖', '🌟', '👍', '🥰'];
+                
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const emoji = $("<div class='emoji'></div>");
+                        const emojiChar = emojis[Math.floor(Math.random() * emojis.length)];
+                        const left = Math.random() * 100;
+                        const delay = Math.random() * 2;
+                        const duration = 2 + Math.random() * 3;
+                        
+                        emoji.text(emojiChar);
+                        emoji.css({
+                            "left": left + "vw",
+                            "bottom": "10vh"
+                        });
+                        
+                        $("body").append(emoji);
+                        
+                        emoji.animate({
+                            "bottom": "100vh",
+                            "left": "+=" + (Math.random() * 20 - 10) + "vw"
+                        }, duration * 1000, function() {
+                            $(this).remove();
+                        });
+                    }, i * 200);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
